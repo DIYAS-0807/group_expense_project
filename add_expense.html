@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Add Expense</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Expense</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
   <h1>Group Expense Manager</h1>
 </header>
@@ -18,34 +17,55 @@
 </nav>
 
 <main>
-  <section class="section" id="add-expense-page">
-    <h2>Add Expense</h2>
-    <div class="flex-row">
-      <div>
-        <label for="expense-payer">Payer</label>
-        <select id="expense-payer"></select>
-      </div>
-      <div>
-        <label for="expense-amount">Amount (₹)</label>
-        <input type="number" id="expense-amount" min="0" step="0.01">
-      </div>
-      <div>
-        <label for="expense-category">Category</label>
-        <select id="expense-category">
-          <option>Food</option>
-          <option>Rent</option>
-          <option>Travel</option>
-          <option>Utilities</option>
-          <option>Others</option>
-        </select>
-      </div>
-    </div>
-    <small>Split: Equally (default)</small>
-    <button id="add-expense-btn">Add Expense</button>
-    <p class="error" id="expense-error"></p>
-  </section>
+<section>
+  <h2>Add Expense</h2>
+  <label for="expense-payer">Payer</label>
+  <select id="expense-payer"></select>
+  <label for="expense-amount">Amount (₹)</label>
+  <input type="number" id="expense-amount" min="0" step="0.01">
+  <label for="expense-category">Category</label>
+  <select id="expense-category">
+    <option>Food</option>
+    <option>Rent</option>
+    <option>Travel</option>
+    <option>Utilities</option>
+    <option>Others</option>
+  </select>
+  <button id="add-expense-btn">Add Expense</button>
+  <p class="error" id="expense-error"></p>
+</section>
 </main>
 
-<script src="script.js"></script>
+<script>
+const group = JSON.parse(localStorage.getItem('group'));
+const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+const payerSelect = document.getElementById('expense-payer');
+const amountInput = document.getElementById('expense-amount');
+const categorySelect = document.getElementById('expense-category');
+const error = document.getElementById('expense-error');
+
+if(!group){ alert('No group found! Create one first.'); window.location.href='index.html'; }
+
+group.members.forEach(m=>{
+  const opt = document.createElement('option');
+  opt.value = m; opt.textContent = m;
+  payerSelect.appendChild(opt);
+});
+
+document.getElementById('add-expense-btn').addEventListener('click', ()=>{
+  error.textContent='';
+  const payer = payerSelect.value;
+  const amount = parseFloat(amountInput.value);
+  const category = categorySelect.value;
+  if(!payer){ error.textContent='Select payer'; return; }
+  if(isNaN(amount) || amount <= 0){ error.textContent='Enter valid amount'; return; }
+
+  expenses.push({payer, amount, category, date: new Date()});
+  localStorage.setItem('expenses', JSON.stringify(expenses));
+  amountInput.value='';
+  alert('Expense added!');
+});
+</script>
 </body>
 </html>
