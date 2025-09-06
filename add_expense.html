@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Expense</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Expense</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <h1>Group Expense Manager</h1>
 </header>
+
+<nav>
+  <a href="index.html">Create Group</a>
+  <a href="add_expense.html">Add Expense</a>
+  <a href="balance.html">Balances</a>
+</nav>
 
 <main>
   <section class="section">
@@ -34,37 +40,12 @@
         </select>
       </div>
     </div>
+    <small>Split: Equally (default)</small>
     <button id="add-expense-btn">Add Expense</button>
     <p class="error" id="expense-error"></p>
-    <ul id="expenses-list"></ul>
   </section>
-
-  <nav>
-    <a href="index.html">Create Group</a>
-    <a href="balance.html">Balances</a>
-  </nav>
 </main>
 
 <script src="script.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', populatePayerDropdown);
-document.getElementById('add-expense-btn').addEventListener('click', () => {
-    const error = document.getElementById('expense-error');
-    error.textContent = '';
-
-    const payer = document.getElementById('expense-payer').value;
-    const amount = parseFloat(document.getElementById('expense-amount').value);
-    const category = document.getElementById('expense-category').value;
-
-    if (!payer) { error.textContent = 'Select a payer'; return; }
-    if (isNaN(amount) || amount <= 0) { error.textContent = 'Enter valid amount'; return; }
-
-    addExpense(payer, amount, category);
-    document.getElementById('expense-amount').value = '';
-    renderExpenses();
-});
-
-renderExpenses();
-</script>
 </body>
 </html>
