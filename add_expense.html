@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Expense</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Add Expense</h1>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="add_expense.html">Add Expense</a> |
+    <a href="members.html">Members</a> |
+    <a href="balance.html">Balance & Dues</a>
+  </nav>
+  <form id="expense-form">
+    <label>Description: <input type="text" id="description" required></label><br>
+    <label>Amount: <input type="number" id="amount" required></label><br>
+    <label>Paid By: 
+      <select id="paidBy"></select>
+    </label><br>
+    <button type="submit">Add Expense</button>
+  </form>
+  <script src="script.js"></script>
+</body>
+</html>
