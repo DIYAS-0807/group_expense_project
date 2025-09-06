@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Group</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Group</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
@@ -16,40 +16,18 @@
     <h2>Create Group & Add Members</h2>
     <label for="group-name">Group Name</label>
     <input type="text" id="group-name" placeholder="e.g. Roommates">
-    
-    <label for="member-names">Members (comma separated)</label>
-    <input type="text" id="member-names" placeholder="e.g. Diya, Priya, Riya">
-    
+
+    <label for="member-name">Add Member</label>
+    <div class="flex-row">
+      <input type="text" id="member-name" placeholder="Member name">
+      <button id="add-member-btn">Add</button>
+    </div>
+    <ul id="member-list"></ul>
     <button id="create-group-btn">Create Group</button>
     <p class="error" id="group-error"></p>
   </section>
-
-  <nav>
-    <a href="add_expense.html">Add Expense</a>
-    <a href="balance.html">Balances</a>
-  </nav>
 </main>
 
 <script src="script.js"></script>
-<script>
-document.getElementById('create-group-btn').addEventListener('click', () => {
-    const groupError = document.getElementById('group-error');
-    groupError.textContent = '';
-
-    const groupName = document.getElementById('group-name').value.trim();
-    const membersRaw = document.getElementById('member-names').value.trim();
-
-    if (!groupName) { groupError.textContent = 'Enter group name'; return; }
-    if (!membersRaw) { groupError.textContent = 'Enter at least one member'; return; }
-
-    const members = membersRaw.split(',').map(m => m.trim()).filter(m => m);
-    if (members.length < 2) { groupError.textContent = 'At least 2 members required'; return; }
-
-    saveGroup(groupName, members);
-    alert('Group created successfully!');
-    document.getElementById('group-name').value = '';
-    document.getElementById('member-names').value = '';
-});
-</script>
 </body>
 </html>
