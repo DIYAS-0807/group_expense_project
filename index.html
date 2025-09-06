@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Group</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Group Expense Manager</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -12,23 +12,20 @@
   <h1>Group Expense Manager</h1>
 </header>
 
-<main>
-  <section class="section">
-    <h2>Create Group</h2>
+<nav id="nav" style="display:none;">
+  <a href="add_expense.html">Add Expense</a>
+  <a href="balance.html">Balances</a>
+</nav>
 
+<main>
+  <section class="section" id="create-group-page">
+    <h2>Create Group & Add Members</h2>
     <label for="group-name">Group Name</label>
     <input type="text" id="group-name" placeholder="e.g. Roommates">
-
-    <label for="member-name">Add Member</label>
-    <div class="flex-row">
-      <input type="text" id="member-name" placeholder="Member name">
-      <button id="add-member-btn">Add</button>
-    </div>
-
-    <ul id="member-list"></ul>
+    <label for="member-names">Members (comma separated)</label>
+    <input type="text" id="member-names" placeholder="e.g. Diya, Priya, Riya">
+    <button id="create-group-btn">Create Group</button>
     <p class="error" id="group-error"></p>
-
-    <button id="create-group-btn">Create Group & Continue</button>
   </section>
 </main>
 
