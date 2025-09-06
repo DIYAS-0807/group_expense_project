@@ -1,4 +1,4 @@
-// Load saved data from localStorage
+// Load saved data
 let members = JSON.parse(localStorage.getItem("members") || "[]");
 let expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
 
@@ -61,6 +61,7 @@ if (expenseForm) {
       });
       localStorage.setItem("expenses", JSON.stringify(expenses));
       renderExpenses();
+      renderBalance();
       expenseForm.reset();
     }
   });
@@ -83,3 +84,33 @@ function renderExpenses() {
   }
 }
 renderExpenses();
+
+// ------------------- Render Balance -------------------
+function renderBalance() {
+  const table = document.getElementById("balance-table");
+  if (table) {
+    const tbody = table.querySelector("tbody");
+    tbody.innerHTML = "";
+    if (members.length === 0) return;
+
+    const totals = {};
+    members.forEach(m => totals[m] = 0);
+
+    let totalAmount = 0;
+    expenses.forEach(exp => {
+      totals[exp.paidBy] += exp.amount;
+      totalAmount += exp.amount;
+    });
+
+    const perPerson = totalAmount / members.length;
+
+    members.forEach(m => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${m}</td>
+                      <td>${totals[m].toFixed(2)}</td>
+                      <td>${(perPerson - totals[m]).toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+}
+renderBalance();
