@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Balances</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Balances</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
   <h1>Group Expense Manager</h1>
-  <nav>
-    <a href="index.html">Create Group</a>
-    <a href="add_expense.html">Add Expense</a>
-    <a href="balance.html">Balances</a>
-  </nav>
 </header>
 
+<nav>
+  <a href="add_expense.html">Add Expense</a>
+  <a href="balance.html">Balances</a>
+</nav>
+
 <main>
-  <section class="section">
-    <h2>Expenses</h2>
+  <section class="section" id="balance-page">
+    <h2>Balances</h2>
+    <h3>Expenses</h3>
     <ul id="expenses-list"></ul>
 
-    <h2>Balances</h2>
-    <ul id="balances-list"></ul>
+    <h3>Balances</h3>
+    <ul id="balances-list" class="balances"></ul>
 
-    <h2>Settlements</h2>
-    <ul id="settlements-list"></ul>
+    <h3>Settlements</h3>
+    <ul id="settlements-list" class="balances"></ul>
   </section>
 </main>
 
