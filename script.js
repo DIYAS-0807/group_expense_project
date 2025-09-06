@@ -86,31 +86,37 @@ function renderExpenses() {
 renderExpenses();
 
 // ------------------- Render Balance -------------------
+// ------------------- Render Balance -------------------
 function renderBalance() {
   const table = document.getElementById("balance-table");
-  if (table) {
-    const tbody = table.querySelector("tbody");
-    tbody.innerHTML = "";
-    if (members.length === 0) return;
+  if (!table) return; // only run if balance table exists
 
-    const totals = {};
-    members.forEach(m => totals[m] = 0);
+  const tbody = table.querySelector("tbody");
+  tbody.innerHTML = "";
 
-    let totalAmount = 0;
-    expenses.forEach(exp => {
-      totals[exp.paidBy] += exp.amount;
-      totalAmount += exp.amount;
-    });
-
-    const perPerson = totalAmount / members.length;
-
-    members.forEach(m => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${m}</td>
-                      <td>${totals[m].toFixed(2)}</td>
-                      <td>${(perPerson - totals[m]).toFixed(2)}</td>`;
-      tbody.appendChild(tr);
-    });
+  if (members.length === 0 || expenses.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3">No data yet. Add members & expenses first.</td></tr>`;
+    return;
   }
+
+  const totals = {};
+  members.forEach(m => totals[m] = 0);
+
+  let totalAmount = 0;
+  expenses.forEach(exp => {
+    totals[exp.paidBy] += exp.amount;
+    totalAmount += exp.amount;
+  });
+
+  const perPerson = totalAmount / members.length;
+
+  members.forEach(m => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${m}</td>
+      <td>${totals[m].toFixed(2)}</td>
+      <td>${(totals[m] - perPerson).toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
-renderBalance();
