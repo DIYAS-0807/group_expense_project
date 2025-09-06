@@ -1,19 +1,19 @@
-// ---------------- Members ----------------
+// Load data from localStorage
 let members = JSON.parse(localStorage.getItem("members") || "[]");
 let expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
 
+// ---------------- Members ----------------
 function renderMembers() {
   const memberList = document.getElementById("member-list");
   if (memberList) {
     memberList.innerHTML = "";
-    members.forEach((m, i) => {
+    members.forEach(m => {
       const li = document.createElement("li");
       li.textContent = m;
       memberList.appendChild(li);
     });
   }
 
-  // Update payer select in add_expense page
   const payerSelect = document.getElementById("expense-payer");
   if (payerSelect) {
     payerSelect.innerHTML = "";
@@ -43,20 +43,14 @@ if (addMemberBtn) {
 const createGroupBtn = document.getElementById("create-group-btn");
 if (createGroupBtn) {
   createGroupBtn.addEventListener("click", () => {
-    const groupNameInput = document.getElementById("group-name");
+    const groupName = document.getElementById("group-name").value.trim();
     const error = document.getElementById("group-error");
     error.textContent = "";
+    if (!groupName) { error.textContent = "Enter group name."; return; }
+    if (members.length < 2) { error.textContent = "Add at least 2 members."; return; }
 
-    if (!groupNameInput.value.trim()) {
-      error.textContent = "Enter group name.";
-      return;
-    }
-    if (members.length < 2) {
-      error.textContent = "Add at least 2 members.";
-      return;
-    }
-
-    localStorage.setItem("groupName", groupNameInput.value.trim());
+    localStorage.setItem("groupName", groupName);
+    localStorage.setItem("members", JSON.stringify(members));
     window.location.href = "add_expense.html";
   });
 }
@@ -81,19 +75,17 @@ if (addExpenseBtn) {
   });
 }
 
-// ---------------- Render Expenses & Balances ----------------
+// ---------------- Render ----------------
 function renderExpenses() {
   const list = document.getElementById("expenses-list");
   if (!list) return;
   list.innerHTML = "";
   if (expenses.length === 0) list.innerHTML = "<li>No expenses yet</li>";
-  else {
-    expenses.forEach(e => {
-      const li = document.createElement("li");
-      li.textContent = `${e.payer} paid ₹${e.amount.toFixed(2)} for ${e.category} on ${e.date}`;
-      list.appendChild(li);
-    });
-  }
+  else expenses.forEach(e => {
+    const li = document.createElement("li");
+    li.textContent = `${e.payer} paid ₹${e.amount.toFixed(2)} for ${e.category} on ${e.date}`;
+    list.appendChild(li);
+  });
 }
 
 function renderBalances() {
@@ -110,7 +102,7 @@ function renderBalances() {
   members.forEach(m => totalPaid[m] = 0);
   expenses.forEach(e => totalPaid[e.payer] += e.amount);
 
-  const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const totalExpense = expenses.reduce((sum,e) => sum + e.amount,0);
   const perPerson = totalExpense / members.length;
 
   members.forEach(m => {
@@ -128,63 +120,51 @@ function renderSettlements() {
   if (!list) return;
   list.innerHTML = "";
 
-  if (members.length === 0 || expenses.length === 
-      // If we are on balance.html, render data
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("expenses-list")) renderExpenses();
-  if (document.getElementById("balances-list")) renderBalances();
-  if (document.getElementById("settlements-list")) renderSettlements();
-});
-
-// Calculate and render settlements
-function renderSettlements() {
-  const list = document.getElementById("settlements-list");
-  if (!list) return;
-  list.innerHTML = "";
-
   if (members.length === 0 || expenses.length === 0) {
     list.innerHTML = "<li>No settlements yet</li>";
     return;
   }
 
-  // calculate net balances
   const totalPaid = {};
-  members.forEach(m => totalPaid[m] = 0);
-  expenses.forEach(e => totalPaid[e.payer] += e.amount);
+  members.forEach(m => totalPaid[m]=0);
+  expenses.forEach(e=>totalPaid[e.payer]+=e.amount);
 
-  const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const totalExpense = expenses.reduce((sum,e)=>sum+e.amount,0);
   const perPerson = totalExpense / members.length;
 
   const netBalances = {};
-  members.forEach(m => netBalances[m] = totalPaid[m] - perPerson);
+  members.forEach(m => netBalances[m] = totalPaid[m]-perPerson);
 
   const creditors = [];
   const debtors = [];
   members.forEach(m => {
-    if (netBalances[m] > 0.01) creditors.push({member: m, amount: netBalances[m]});
-    else if (netBalances[m] < -0.01) debtors.push({member: m, amount: -netBalances[m]});
+    if (netBalances[m] > 0.01) creditors.push({member:m, amount:netBalances[m]});
+    else if (netBalances[m] < -0.01) debtors.push({member:m, amount:-netBalances[m]});
   });
 
-  if (creditors.length === 0 && debtors.length === 0) {
+  if (creditors.length===0 && debtors.length===0) {
     list.innerHTML = "<li>All settled!</li>";
     return;
   }
 
-  let i = 0, j = 0;
-  while (i < debtors.length && j < creditors.length) {
-    const debtor = debtors[i];
-    const creditor = creditors[j];
-    const amt = Math.min(debtor.amount, creditor.amount);
-
-    const li = document.createElement("li");
+  let i=0,j=0;
+  while(i<debtors.length && j<creditors.length) {
+    const debtor=debtors[i], creditor=creditors[j];
+    const amt=Math.min(debtor.amount, creditor.amount);
+    const li=document.createElement("li");
     li.textContent = `${debtor.member} pays ₹${amt.toFixed(2)} to ${creditor.member}`;
     list.appendChild(li);
 
-    debtor.amount -= amt;
-    creditor.amount -= amt;
-
-    if (debtor.amount < 0.01) i++;
-    if (creditor.amount < 0.01) j++;
+    debtor.amount-=amt; creditor.amount-=amt;
+    if(debtor.amount<0.01) i++;
+    if(creditor.amount<0.01) j++;
   }
 }
 
+// Render on balance.html
+document.addEventListener("DOMContentLoaded",()=>{
+  if(document.getElementById("expenses-list")) renderExpenses();
+  if(document.getElementById("balances-list")) renderBalances();
+  if(document.getElementById("settlements-list")) renderSettlements();
+  renderMembers(); // for add_expense.html
+});
