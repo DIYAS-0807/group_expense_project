@@ -1,24 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Balance Sheet</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Balances</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Balance Sheet</h1>
-  <table border="1" id="balance-table">
-    <thead>
-      <tr>
-        <th>Member</th>
-        <th>Total Paid</th>
-        <th>Balance</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<header>
+  <h1>Group Expense Manager</h1>
+</header>
 
-  <a href="members.html">Back to Members</a>
+<nav>
+  <a href="index.html">Create Group</a>
+  <a href="add-expense.html">Add Expense</a>
+  <a href="balances.html">Balances</a>
+</nav>
 
-  <script src="script.js"></script>
+<main>
+  <section class="section">
+    <h2>Balances</h2>
+    <h3>Expenses</h3>
+    <ul id="expenses-list"></ul>
+
+    <h3>Balances</h3>
+    <ul id="balances-list" class="balances"></ul>
+
+    <h3>Settlements</h3>
+    <ul id="settlements-list" class="balances"></ul>
+  </section>
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
-
