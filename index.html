@@ -2,31 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Shared Expense Manager</title>
+  <title>Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Shared Expense Manager</h1>
-  <nav>
-    <a href="index.html">Home</a> |
-    <a href="add_expense.html">Add Expense</a> |
-    <a href="members.html">Members</a> |
-    <a href="balance.html">Balance & Dues</a>
-  </nav>
-  <div id="dashboard">
-    <h2>All Expenses</h2>
-    <table id="expense-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Description</th>
-          <th>Amount</th>
-          <th>Paid By</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+  <h1>📌 Dashboard</h1>
+
+  <h2>All Expenses</h2>
+  <table id="expense-table" border="1">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Paid By</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>Balance Sheet</h2>
+  <table id="balance-table" border="1">
+    <thead>
+      <tr>
+        <th>Member</th>
+        <th>Paid</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
   <script src="script.js"></script>
 </body>
 </html>
