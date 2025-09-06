@@ -3,23 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Group Expense Manager</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Create Group</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
   <h1>Group Expense Manager</h1>
 </header>
 
-<nav id="nav" style="display:none;">
-  <button id="add-expense-nav-btn">Add Expense</button>
-  <button id="balance-nav-btn">Balances</button>
-</nav>
-
 <main>
-  <!-- Page 1: Create Group -->
-  <section class="section page active" id="create-group-page">
+  <section class="section">
     <h2>Create Group & Add Members</h2>
     <label for="group-name">Group Name</label>
     <input type="text" id="group-name" placeholder="e.g. Roommates" />
@@ -27,47 +20,6 @@
     <input type="text" id="member-names" placeholder="e.g. Diya, Priya, Riya" />
     <button id="create-group-btn">Create Group</button>
     <p class="error" id="group-error"></p>
-  </section>
-
-  <!-- Page 2: Add Expense -->
-  <section class="section page" id="add-expense-page">
-    <h2>Add Expense</h2>
-    <div class="flex-row">
-      <div>
-        <label for="expense-payer">Payer</label>
-        <select id="expense-payer"></select>
-      </div>
-      <div>
-        <label for="expense-amount">Amount (₹)</label>
-        <input type="number" id="expense-amount" min="0" step="0.01" />
-      </div>
-      <div>
-        <label for="expense-category">Category</label>
-        <select id="expense-category">
-          <option>Food</option>
-          <option>Rent</option>
-          <option>Travel</option>
-          <option>Utilities</option>
-          <option>Others</option>
-        </select>
-      </div>
-    </div>
-    <small>Split: Equally (default)</small>
-    <button id="add-expense-btn">Add Expense</button>
-    <p class="error" id="expense-error"></p>
-  </section>
-
-  <!-- Page 3: Balances -->
-  <section class="section page" id="balance-page">
-    <h2>Balances</h2>
-    <h3>Expenses</h3>
-    <ul id="expenses-list"></ul>
-
-    <h3>Balances</h3>
-    <ul id="balances-list" class="balances"></ul>
-
-    <h3>Settlements</h3>
-    <ul id="settlements-list" class="balances"></ul>
   </section>
 </main>
 
