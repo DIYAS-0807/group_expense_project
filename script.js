@@ -1,0 +1,96 @@
+// Initialize storage
+let members = JSON.parse(localStorage.getItem("members") || "[]");
+let expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
+
+// ------------------- Members -------------------
+function renderMembers() {
+  const memberList = document.getElementById("member-list");
+  if (!memberList) return;
+  memberList.innerHTML = "";
+  members.forEach((m, i) => {
+    const li = document.createElement("li");
+    li.textContent = m;
+    memberList.appendChild(li);
+  });
+  // Also update select for expenses
+  const paidBy = document.getElementById("paidBy");
+  if (paidBy) {
+    paidBy.innerHTML = "";
+    members.forEach(m => {
+      const option = document.createElement("option");
+      option.value = m;
+      option.textContent = m;
+      paidBy.appendChild(option);
+    });
+  }
+}
+
+const memberForm = document.getElementById("member-form");
+if (memberForm) {
+  memberForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const name = document.getElementById("member-name").value.trim();
+    if (name && !members.includes(name)) {
+      members.push(name);
+      localStorage.setItem("members", JSON.stringify(members));
+      renderMembers();
+      memberForm.reset();
+    }
+  });
+}
+renderMembers();
+
+// ------------------- Expenses -------------------
+const expenseForm = document.getElementById("expense-form");
+if (expenseForm) {
+  expenseForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const description = document.getElementById("description").value;
+    const amount = parseFloat(document.getElementById("amount").value);
+    const paidBy = document.getElementById("paidBy").value;
+    expenses.push({ description, amount, paidBy, date: new Date().toLocaleDateString() });
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+    expenseForm.reset();
+  });
+}
+
+// ------------------- Dashboard -------------------
+function renderExpenses() {
+  const table = document.getElementById("expense-table");
+  if (!table) return;
+  const tbody = table.querySelector("tbody");
+  tbody.innerHTML = "";
+  expenses.forEach(exp => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${exp.date}</td><td>${exp.description}</td><td>${exp.amount}</td><td>${exp.paidBy}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+renderExpenses();
+
+// ------------------- Balance -------------------
+function renderBalance() {
+  const table = document.getElementById("balance-table");
+  if (!table) return;
+  const tbody = table.querySelector("tbody");
+  tbody.innerHTML = "";
+  if (members.length === 0) return;
+
+  const totals = {};
+  members.forEach(m => totals[m] = 0);
+
+  let totalAmount = 0;
+  expenses.forEach(exp => {
+    totals[exp.paidBy] += exp.amount;
+    totalAmount += exp.amount;
+  });
+
+  const perPerson = totalAmount / members.length;
+
+  members.forEach(m => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${m}</td><td>${totals[m].toFixed(2)}</td><td>${(perPerson - totals[m]).toFixed(2)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+renderBalance();
