@@ -7,7 +7,24 @@ function renderMembers() {
   const memberList = document.getElementById("member-list");
   if (memberList) {
     memberList.innerHTML = "";
-    members.forEach(m => {
+    members.forEach(m => {      settlements.push({
+        from: debtor.member,
+        to: creditor.member,
+        amount: minAmount
+      });
+      debtor.amount -= minAmount;
+      creditor.amount -= minAmount;
+      if (debtor.amount < 0.01) i++;
+      if (creditor.amount < 0.01) j++;
+    }
+    // Render settlement suggestions
+    settlements.forEach(s => {
+      const li = document.createElement('li');
+      li.textContent = `${s.from} should pay ${s.to} ₹${s.amount.toFixed(2)}`;
+      settlementsList.appendChild(li);
+    });
+  }
+</script>
       const li = document.createElement("li");
       li.textContent = m;
       memberList.appendChild(li);
