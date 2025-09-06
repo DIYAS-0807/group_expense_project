@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balances</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balances</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <h1>Group Expense Manager</h1>
 </header>
+
+<nav>
+  <a href="index.html">Create Group</a>
+  <a href="add_expense.html">Add Expense</a>
+  <a href="balance.html">Balances</a>
+</nav>
 
 <main>
   <section class="section">
@@ -17,19 +23,13 @@
     <ul id="expenses-list"></ul>
 
     <h2>Balances</h2>
-    <ul id="balances-list"></ul>
-  </section>
+    <ul id="balances-list" class="balances"></ul>
 
-  <nav>
-    <a href="index.html">Create Group</a>
-    <a href="add_expense.html">Add Expense</a>
-  </nav>
+    <h2>Settlements</h2>
+    <ul id="settlements-list" class="balances"></ul>
+  </section>
 </main>
 
 <script src="script.js"></script>
-<script>
-renderExpenses();
-renderBalances();
-</script>
 </body>
 </html>
