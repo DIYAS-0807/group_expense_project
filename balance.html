@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Balances</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balances</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
   <h1>Group Expense Manager</h1>
 </header>
@@ -18,19 +17,88 @@
 </nav>
 
 <main>
-  <section class="section" id="balance-page">
-    <h2>Balances</h2>
-    <h3>Expenses</h3>
-    <ul id="expenses-list"></ul>
-
-    <h3>Balances</h3>
-    <ul id="balances-list" class="balances"></ul>
-
-    <h3>Settlements</h3>
-    <ul id="settlements-list" class="balances"></ul>
-  </section>
+<section>
+  <h2>Balances</h2>
+  <h3>Expenses</h3>
+  <ul id="expenses-list"></ul>
+  <h3>Balances</h3>
+  <ul id="balances-list" class="balances"></ul>
+  <h3>Settlements</h3>
+  <ul id="settlements-list" class="balances"></ul>
+</section>
 </main>
 
-<script src="script.js"></script>
+<script>
+const group = JSON.parse(localStorage.getItem('group'));
+const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+const expensesList = document.getElementById('expenses-list');
+const balancesList = document.getElementById('balances-list');
+const settlementsList = document.getElementById('settlements-list');
+
+if(!group){ alert('No group found! Create one first.'); window.location.href='index.html'; }
+
+function renderBalances(){
+  expensesList.innerHTML='';
+  balancesList.innerHTML='';
+  settlementsList.innerHTML='';
+
+  if(expenses.length===0){
+    expensesList.innerHTML='<li>No expenses</li>';
+    balancesList.innerHTML='<li>No balances</li>';
+    settlementsList.innerHTML='<li>No settlements</li>';
+    return;
+  }
+
+  expenses.forEach(e=>{
+    const li=document.createElement('li');
+    li.textContent=`${e.payer} paid ₹${e.amount.toFixed(2)} for ${e.category} on ${new Date(e.date).toLocaleDateString()}`;
+    expensesList.appendChild(li);
+  });
+
+  const totalPaid = {}; group.members.forEach(m=>totalPaid[m]=0);
+  expenses.forEach(e=>totalPaid[e.payer]+=e.amount);
+
+  const totalExpenses = expenses.reduce((sum,e)=>sum+e.amount,0);
+  const sharePerMember = totalExpenses / group.members.length;
+
+  const netBalances={};
+  group.members.forEach(m=>netBalances[m]=totalPaid[m]-sharePerMember);
+
+  group.members.forEach(m=>{
+    const li=document.createElement('li');
+    const bal=netBalances[m];
+    if(bal>0) li.textContent=`${m} should receive ₹${bal.toFixed(2)}`;
+    else if(bal<0) li.textContent=`${m} owes ₹${(-bal).toFixed(2)}`;
+    else li.textContent=`${m} is settled`;
+    balancesList.appendChild(li);
+  });
+
+  // Settlements
+  const creditors=[], debtors=[];
+  group.members.forEach(m=>{
+    const bal=netBalances[m];
+    if(bal>0.01) creditors.push({member:m,amount:bal});
+    else if(bal<-0.01) debtors.push({member:m,amount:-bal});
+  });
+
+  const settlements=[]; let i=0,j=0;
+  while(i<debtors.length && j<creditors.length){
+    const debtor=debtors[i], creditor=creditors[j];
+    const amt=Math.min(debtor.amount,creditor.amount);
+    settlements.push({from:debtor.member,to:creditor.member,amount:amt});
+    debtor.amount-=amt; creditor.amount-=amt;
+    if(debtor.amount<0.01) i++; if(creditor.amount<0.01) j++;
+  }
+
+  if(settlements.length===0) settlementsList.innerHTML='<li>All settled!</li>';
+  else settlements.forEach(s=>{
+    const li=document.createElement('li');
+    li.textContent=`${s.from} pays ${s.to} ₹${s.amount.toFixed(2)}`;
+    settlementsList.appendChild(li);
+  });
+}
+
+renderBalances();
+</script>
 </body>
 </html>
