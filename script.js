@@ -129,3 +129,62 @@ function renderSettlements() {
   list.innerHTML = "";
 
   if (members.length === 0 || expenses.length === 
+      // If we are on balance.html, render data
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("expenses-list")) renderExpenses();
+  if (document.getElementById("balances-list")) renderBalances();
+  if (document.getElementById("settlements-list")) renderSettlements();
+});
+
+// Calculate and render settlements
+function renderSettlements() {
+  const list = document.getElementById("settlements-list");
+  if (!list) return;
+  list.innerHTML = "";
+
+  if (members.length === 0 || expenses.length === 0) {
+    list.innerHTML = "<li>No settlements yet</li>";
+    return;
+  }
+
+  // calculate net balances
+  const totalPaid = {};
+  members.forEach(m => totalPaid[m] = 0);
+  expenses.forEach(e => totalPaid[e.payer] += e.amount);
+
+  const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const perPerson = totalExpense / members.length;
+
+  const netBalances = {};
+  members.forEach(m => netBalances[m] = totalPaid[m] - perPerson);
+
+  const creditors = [];
+  const debtors = [];
+  members.forEach(m => {
+    if (netBalances[m] > 0.01) creditors.push({member: m, amount: netBalances[m]});
+    else if (netBalances[m] < -0.01) debtors.push({member: m, amount: -netBalances[m]});
+  });
+
+  if (creditors.length === 0 && debtors.length === 0) {
+    list.innerHTML = "<li>All settled!</li>";
+    return;
+  }
+
+  let i = 0, j = 0;
+  while (i < debtors.length && j < creditors.length) {
+    const debtor = debtors[i];
+    const creditor = creditors[j];
+    const amt = Math.min(debtor.amount, creditor.amount);
+
+    const li = document.createElement("li");
+    li.textContent = `${debtor.member} pays ₹${amt.toFixed(2)} to ${creditor.member}`;
+    list.appendChild(li);
+
+    debtor.amount -= amt;
+    creditor.amount -= amt;
+
+    if (debtor.amount < 0.01) i++;
+    if (creditor.amount < 0.01) j++;
+  }
+}
+
